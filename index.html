@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAS Countdown</title>
+  
+  <!-- Google Fonts: Orbitron & Rajdhani for futuristic sci-fi aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #191919; /* Notion Dark Mode theme */
+      color: #ffffff;
+      font-family: 'Rajdhani', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    /* Outer wrapper containing title & grid centered on screen */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      width: min(90%, 900px);
+      padding: 30px 0;
+    }
+
+    /* Title aligned precisely so 'U' matches the exact outer left edge of the first circle */
+    .title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 4px;
+      margin-bottom: 25px;
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(255, 166, 0, 0.45);
+      align-self: flex-start;
+      padding-left: 0;
+      margin-left: 0;
+    }
+
+    /* Grid layout for 4 circular countdown items */
+    .countdown-grid {
+      display: flex;
+      gap: clamp(15px, 3vw, 35px);
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .circle-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      max-width: 180px;
+    }
+
+    .circle-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+    }
+
+    /* SVG Canvas setup with visible overflow to avoid clip glitches */
+    .circle-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      overflow: visible;
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: #2a2a2a;
+      stroke-width: 6;
+    }
+
+    /* Animated circular progress indicator with rich outer glow */
+    .circle-progress {
+      fill: none;
+      stroke: #ffa600;
+      stroke-width: 6;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s linear;
+      filter: drop-shadow(0 0 9px rgba(255, 166, 0, 0.9));
+    }
+
+    /* Prominent numeric readout with glowing aura */
+    .number {
+      position: absolute;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 4.8vw, 3.4rem);
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 166, 0, 0.55);
+    }
+
+    /* Label text: crisp white with subtle matching glow effect */
+    .label {
+      margin-top: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.75rem, 1.4vw, 1.05rem);
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(255, 166, 0, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">UAS COUNTDOWN</h1>
+    
+    <div class="countdown-grid">
+      
+      <!-- Days Unit -->
+      <div class="circle-item">
+        <div class="circle-wrapper">
+          <svg class="circle-svg" viewBox="0 0 100 100">
+            <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="circle-progress" id="ring-days" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="0"></circle>
+          </svg>
+          <span class="number" id="days">00</span>
+        </div>
+        <span class="label">Days</span>
+      </div>
+
+      <!-- Hours Unit -->
+      <div class="circle-item">
+        <div class="circle-wrapper">
+          <svg class="circle-svg" viewBox="0 0 100 100">
+            <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="circle-progress" id="ring-hours" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="0"></circle>
+          </svg>
+          <span class="number" id="hours">00</span>
+        </div>
+        <span class="label">Hours</span>
+      </div>
+
+      <!-- Minutes Unit -->
+      <div class="circle-item">
+        <div class="circle-wrapper">
+          <svg class="circle-svg" viewBox="0 0 100 100">
+            <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="circle-progress" id="ring-minutes" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="0"></circle>
+          </svg>
+          <span class="number" id="minutes">00</span>
+        </div>
+        <span class="label">Minutes</span>
+      </div>
+
+      <!-- Seconds Unit -->
+      <div class="circle-item">
+        <div class="circle-wrapper">
+          <svg class="circle-svg" viewBox="0 0 100 100">
+            <circle class="circle-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="circle-progress" id="ring-seconds" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="0"></circle>
+          </svg>
+          <span class="number" id="seconds">00</span>
+        </div>
+        <span class="label">Seconds</span>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Target UAS Date
+    const targetDate = new Date("2026-11-28T00:00:00+07:00").getTime();
+    const circumference = 2 * Math.PI * 40; // Approx 251.33px radius perimeter
+
+    /**
+     * Updates strokeDashoffset for SVG rings smoothly
+     */
+    function updateProgress(id, value, max) {
+      const circle = document.getElementById(id);
+      if (!circle) return;
+      const offset = circumference - (value / max) * circumference;
+      circle.style.strokeDashoffset = offset;
+    }
+
+    /**
+     * Main timer update routine
+     */
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.querySelector(".container").innerHTML = "<h1 class='title'>UAS DILAKSANAKAN!</h1>";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+
+      // Update progress stroke rings dynamically
+      updateProgress("ring-days", days % 365, 365);
+      updateProgress("ring-hours", hours, 24);
+      updateProgress("ring-minutes", minutes, 60);
+      updateProgress("ring-seconds", seconds, 60);
+    }
+
+    // Refresh every second
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
