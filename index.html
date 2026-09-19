@@ -17,48 +17,49 @@
       padding: 0;
     }
 
-    body {
+    html, body {
       background-color: #191919; /* Notion Dark Mode theme */
       color: #ffffff;
       font-family: 'Rajdhani', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       width: 100%;
-      overflow-x: hidden;
-      padding: 0 10px; /* Dikurangi dari 10px atas-bawah menjadi 0 */
+      height: auto;
+      min-height: 0 !important;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
     }
 
-    /* Outer wrapper containing title & grid centered on screen */
     .container {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      justify-content: center;
+      justify-content: flex-start;
       width: 100%;
       max-width: 900px;
-      padding: 5px 0; /* Dikurangi dari 15px 5px menjadi 5px 0 */
+      padding: 10px 0 5px 0; /* Padding atas aman agar judul tidak terpotong */
+      margin: 0 auto;
     }
 
-    /* Title aligned precisely */
+    /* Judul tetap normal tanpa margin-top negatif */
     .title {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.4rem, 5vw, 2.8rem);
+      font-size: clamp(1.3rem, 4.5vw, 2.5rem);
       font-weight: 800;
       letter-spacing: 2px;
-      margin-bottom: 10px; /* Dikurangi dari 20px menjadi 10px */
+      margin-top: 0; /* Mengembalikan margin-top normal */
+      margin-bottom: 25px; /* Memberikan Jarak/Gap yang cukup ke lingkaran countdown di bawahnya */
       color: #ffffff;
       text-shadow: 0 0 12px rgba(255, 166, 0, 0.45);
       align-self: flex-start;
       width: 100%;
       word-wrap: break-word;
+      line-height: 1.2;
     }
 
     /* Grid layout for 4 circular countdown items */
     .countdown-grid {
       display: flex;
-      gap: clamp(8px, 2vw, 25px);
+      gap: clamp(6px, 2vw, 25px);
       justify-content: space-between;
       align-items: center;
       width: 100%;
@@ -69,7 +70,7 @@
       flex-direction: column;
       align-items: center;
       flex: 1;
-      min-width: 0; /* Mencegah flex item meluap/overflow */
+      min-width: 0;
       max-width: 180px;
     }
 
@@ -111,7 +112,7 @@
     .number {
       position: absolute;
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.1rem, 4vw, 3.4rem);
+      font-size: clamp(1.1rem, 4vw, 3.2rem);
       font-weight: 800;
       color: #ffffff;
       text-shadow: 0 0 10px rgba(255, 166, 0, 0.55);
@@ -120,9 +121,9 @@
 
     /* Label text */
     .label {
-      margin-top: 6px; /* Dikurangi dari 8px menjadi 6px */
+      margin-top: 8px;
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(0.55rem, 1.8vw, 1.05rem);
+      font-size: clamp(0.55rem, 1.8vw, 1rem);
       font-weight: 600;
       color: #ffffff;
       letter-spacing: 1px;
@@ -132,18 +133,15 @@
       white-space: nowrap;
     }
 
-    /* Penyesuaian khusus jarak ringkas untuk Layar HP */
+    /* Penyesuaian khusus untuk HP */
     @media (max-width: 480px) {
-      body {
-        min-height: auto; /* Mencegah body mengambil tinggi layar penuh jika di-embed di Notion */
-        padding: 0;
-      }
       .container {
-        padding: 2px 0; /* Padding atas & bawah sangat minim untuk HP */
+        padding: 5px 0;
       }
       .title {
-        letter-spacing: 1.5px;
-        margin-bottom: 8px; /* Jarak judul ke lingkaran diperketat */
+        letter-spacing: 1.2px;
+        margin-top: 0;
+        margin-bottom: 18px; /* Jarak antara judul dan countdown di HP */
       }
       .countdown-grid {
         gap: 6px;
@@ -153,7 +151,7 @@
       }
       .label {
         letter-spacing: 0.5px;
-        margin-top: 4px; /* Jarak lingkaran ke label teks diperketat */
+        margin-top: 5px;
       }
     }
   </style>
@@ -219,11 +217,8 @@
   <script>
     // Target UAS Date
     const targetDate = new Date("2026-11-28T00:00:00+07:00").getTime();
-    const circumference = 2 * Math.PI * 40; // Approx 251.33px radius perimeter
+    const circumference = 2 * Math.PI * 40;
 
-    /**
-     * Updates strokeDashoffset for SVG rings smoothly
-     */
     function updateProgress(id, value, max) {
       const circle = document.getElementById(id);
       if (!circle) return;
@@ -231,9 +226,6 @@
       circle.style.strokeDashoffset = offset;
     }
 
-    /**
-     * Main timer update routine
-     */
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
@@ -253,14 +245,12 @@
       document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
       document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
 
-      // Update progress stroke rings dynamically
       updateProgress("ring-days", days % 365, 365);
       updateProgress("ring-hours", hours, 24);
       updateProgress("ring-minutes", minutes, 60);
       updateProgress("ring-seconds", seconds, 60);
     }
 
-    // Refresh every second
     setInterval(updateCountdown, 1000);
     updateCountdown();
   </script>
