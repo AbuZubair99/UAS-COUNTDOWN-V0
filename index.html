@@ -22,69 +22,77 @@
       color: #ffffff;
       font-family: 'Rajdhani', sans-serif;
       width: 100%;
-      height: auto;
-      min-height: 0 !important;
+      height: 100%;
       overflow: hidden;
-      padding: 0;
-      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
+    /* Container dengan flex centering */
     .container {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: flex-start;
-      justify-content: flex-start;
       width: 100%;
-      max-width: 900px;
-      padding: 10px 0 5px 0; /* Padding atas aman agar judul tidak terpotong */
-      margin: 0 auto;
+      height: 100%;
+      max-width: 1000px;
+      padding: 15px 2%;
+      box-sizing: border-box;
     }
 
-    /* Judul tetap normal tanpa margin-top negatif */
+    /* Title dihitung secara presisi mengikuti posisi lingkaran pertama */
     .title {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.3rem, 4.5vw, 2.5rem);
+      font-size: clamp(1.2rem, 4.5cqi + 0.5rem, 2.5rem);
       font-weight: 800;
-      letter-spacing: 2px;
-      margin-top: 0; /* Mengembalikan margin-top normal */
-      margin-bottom: 25px; /* Memberikan Jarak/Gap yang cukup ke lingkaran countdown di bawahnya */
+      letter-spacing: 0.1em;
       color: #ffffff;
       text-shadow: 0 0 12px rgba(255, 166, 0, 0.45);
-      align-self: flex-start;
       width: 100%;
-      word-wrap: break-word;
+      margin-top: 0;
+      /*
+        Perhitungan margin-left presisi sejajar tepi luar lingkaran:
+        Lingkaran berukuran max 180px dan berjarak simetris di dalam flex item-nya.
+        2.5% sampai 3% adalah offset yang pas agar 'U' lurus rata dengan kurva luar lingkaran pertama.
+      */
+      margin-left: clamp(18px, 2.8%, 32px);
+      margin-bottom: 20px;
       line-height: 1.2;
+      white-space: nowrap;
     }
 
-    /* Grid layout for 4 circular countdown items */
+    /* Grid layout flexbox yang elastis */
     .countdown-grid {
       display: flex;
-      gap: clamp(6px, 2vw, 25px);
+      flex-direction: row;
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      gap: 2%;
     }
 
     .circle-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex: 1;
+      justify-content: center;
+      flex: 1 1 0px;
       min-width: 0;
-      max-width: 180px;
     }
 
     .circle-wrapper {
       position: relative;
       width: 100%;
+      max-width: 180px;
       aspect-ratio: 1 / 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: visible;
     }
 
-    /* SVG Canvas setup */
+    /* SVG Canvas skalabel */
     .circle-svg {
       width: 100%;
       height: 100%;
@@ -98,7 +106,6 @@
       stroke-width: 6;
     }
 
-    /* Animated circular progress indicator */
     .circle-progress {
       fill: none;
       stroke: #ffa600;
@@ -108,50 +115,35 @@
       filter: drop-shadow(0 0 8px rgba(255, 166, 0, 0.8));
     }
 
-    /* Prominent numeric readout */
+    /* Angka dinamis menyesuaikan lingkaran */
     .number {
       position: absolute;
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.1rem, 4vw, 3.2rem);
+      font-size: clamp(0.9rem, 6cqi + 0.2rem, 3.2rem);
       font-weight: 800;
       color: #ffffff;
       text-shadow: 0 0 10px rgba(255, 166, 0, 0.55);
       text-align: center;
     }
 
-    /* Label text */
+    /* Teks label dinamis */
     .label {
       margin-top: 8px;
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(0.55rem, 1.8vw, 1rem);
+      font-size: clamp(0.5rem, 2.2cqi, 1rem);
       font-weight: 600;
       color: #ffffff;
-      letter-spacing: 1px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       text-shadow: 0 0 8px rgba(255, 166, 0, 0.4);
       text-align: center;
       white-space: nowrap;
     }
 
-    /* Penyesuaian khusus untuk HP */
     @media (max-width: 480px) {
-      .container {
-        padding: 5px 0;
-      }
       .title {
-        letter-spacing: 1.2px;
-        margin-top: 0;
-        margin-bottom: 18px; /* Jarak antara judul dan countdown di HP */
-      }
-      .countdown-grid {
-        gap: 6px;
-      }
-      .circle-bg, .circle-progress {
-        stroke-width: 7;
-      }
-      .label {
-        letter-spacing: 0.5px;
-        margin-top: 5px;
+        margin-left: 14px; /* Penyesuaian presisi untuk layar HP */
+        margin-bottom: 16px;
       }
     }
   </style>
