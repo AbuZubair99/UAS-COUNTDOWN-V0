@@ -42,7 +42,7 @@
       box-sizing: border-box;
     }
 
-    /* Title dihitung secara presisi mengikuti posisi lingkaran pertama */
+    /* Title dihitung presisi sejajar tepi luar lingkaran */
     .title {
       font-family: 'Orbitron', sans-serif;
       font-size: clamp(1.2rem, 4.5cqi + 0.5rem, 2.5rem);
@@ -52,11 +52,6 @@
       text-shadow: 0 0 12px rgba(255, 166, 0, 0.45);
       width: 100%;
       margin-top: 0;
-      /*
-        Perhitungan margin-left presisi sejajar tepi luar lingkaran:
-        Lingkaran berukuran max 180px dan berjarak simetris di dalam flex item-nya.
-        2.5% sampai 3% adalah offset yang pas agar 'U' lurus rata dengan kurva luar lingkaran pertama.
-      */
       margin-left: clamp(18px, 2.8%, 32px);
       margin-bottom: 20px;
       line-height: 1.2;
@@ -115,11 +110,11 @@
       filter: drop-shadow(0 0 8px rgba(255, 166, 0, 0.8));
     }
 
-    /* Angka dinamis menyesuaikan lingkaran */
+    /* Ukuran angka diperkecil agar pas dan proporsional */
     .number {
       position: absolute;
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(0.9rem, 6cqi + 0.2rem, 3.2rem);
+      font-size: clamp(0.75rem, 4.2cqi, 2.2rem); /* Diperkecil dari rentang sebelumnya */
       font-weight: 800;
       color: #ffffff;
       text-shadow: 0 0 10px rgba(255, 166, 0, 0.55);
@@ -142,7 +137,7 @@
 
     @media (max-width: 480px) {
       .title {
-        margin-left: 14px; /* Penyesuaian presisi untuk layar HP */
+        margin-left: 14px;
         margin-bottom: 16px;
       }
     }
