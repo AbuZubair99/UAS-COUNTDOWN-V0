@@ -27,7 +27,7 @@
       min-height: 100vh;
       width: 100%;
       overflow-x: hidden;
-      padding: 10px;
+      padding: 0 10px; /* Dikurangi dari 10px atas-bawah menjadi 0 */
     }
 
     /* Outer wrapper containing title & grid centered on screen */
@@ -38,7 +38,7 @@
       justify-content: center;
       width: 100%;
       max-width: 900px;
-      padding: 15px 5px;
+      padding: 5px 0; /* Dikurangi dari 15px 5px menjadi 5px 0 */
     }
 
     /* Title aligned precisely */
@@ -47,7 +47,7 @@
       font-size: clamp(1.4rem, 5vw, 2.8rem);
       font-weight: 800;
       letter-spacing: 2px;
-      margin-bottom: 20px;
+      margin-bottom: 10px; /* Dikurangi dari 20px menjadi 10px */
       color: #ffffff;
       text-shadow: 0 0 12px rgba(255, 166, 0, 0.45);
       align-self: flex-start;
@@ -120,7 +120,7 @@
 
     /* Label text */
     .label {
-      margin-top: 8px;
+      margin-top: 6px; /* Dikurangi dari 8px menjadi 6px */
       font-family: 'Orbitron', sans-serif;
       font-size: clamp(0.55rem, 1.8vw, 1.05rem);
       font-weight: 600;
@@ -132,23 +132,28 @@
       white-space: nowrap;
     }
 
-    /* Penyesuaian khusus untuk Layar HP (iPhone 11 Pro & sejenisnya) */
+    /* Penyesuaian khusus jarak ringkas untuk Layar HP */
     @media (max-width: 480px) {
+      body {
+        min-height: auto; /* Mencegah body mengambil tinggi layar penuh jika di-embed di Notion */
+        padding: 0;
+      }
       .container {
-        padding: 10px 0;
+        padding: 2px 0; /* Padding atas & bawah sangat minim untuk HP */
       }
       .title {
         letter-spacing: 1.5px;
-        margin-bottom: 15px;
+        margin-bottom: 8px; /* Jarak judul ke lingkaran diperketat */
       }
       .countdown-grid {
-        gap: 6px; /* Jarak antar lingkaran diperkecil di HP */
+        gap: 6px;
       }
       .circle-bg, .circle-progress {
-        stroke-width: 7; /* Ketebalan garis sedikit disesuaikan */
+        stroke-width: 7;
       }
       .label {
-        letter-spacing: 0.5px; /* Mengurangi spasi huruf agar label "SECONDS" tidak sesak */
+        letter-spacing: 0.5px;
+        margin-top: 4px; /* Jarak lingkaran ke label teks diperketat */
       }
     }
   </style>
